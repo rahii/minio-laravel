@@ -2,6 +2,7 @@
     "name": "rahii/minio-laravel",
     "description": "Minio Client for Laravel",
     "license": "GPLv2",
+    "minimum-stability": "stable",
     "keywords": [
         "laravel",
         "package",
