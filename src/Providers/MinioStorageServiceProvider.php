@@ -16,7 +16,7 @@ class MinioStorageServiceProvider extends ServiceProvider
 
         // Publish configurations to config/pap-storage
         $this->publishes([
-            __DIR__ . '/config' => config_path('pap-storage'),
+            __DIR__ . '/../config' => config_path(),
         ]);
 
     }
