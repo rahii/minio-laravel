@@ -1,0 +1,32 @@
+{
+    "name": "rahii/minio-laravel",
+    "description": "Minio Client for Laravel",
+    "license": "GPLv2",
+    "keywords": [
+        "laravel",
+        "package",
+        "minio",
+        "object-storage"
+    ],
+    "authors": [
+        {
+            "name": "Sajjad Rahnama",
+            "email": "sajjad.rahnama7@gmail.com"
+        },
+        {
+            "name": "Mahshid Alinoori",
+            "email": "mahshid.alinoori@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.4"
+    },
+    "autoload": {
+        "classmap": [
+            "src/"
+        ],
+        "psr-4": {
+            "SCR12\\MinioLaravel\\": "src/"
+        }
+    }
+}
