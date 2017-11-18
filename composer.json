@@ -27,7 +27,7 @@
             "src/"
         ],
         "psr-4": {
-            "SCR12\\MinioLaravel\\": "src/"
+            "Rahii\\MinioLaravel\\": "src/"
         }
     }
 }
