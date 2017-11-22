@@ -37,8 +37,11 @@ class MinioStorageServiceProvider extends ServiceProvider
         );
         */
 
-        $this->app->bind('ClassExample', function(){
+        /*$this->app->bind('ClassExample', function(){
             return $this->app->make('Rahii\MinioLaravel\Classes\ClassExample');
+        });*/
+        $this->app->bind('StorageClass', function(){
+            return $this->app->make('Rahii\MinioLaravel\Classes\StorageClass');
         });
 
     }
