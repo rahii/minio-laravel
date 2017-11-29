@@ -17,18 +17,18 @@ class MongoManager
 
     public function __construct()
     {
-        $this->client = $this->getClient();
+        $this->setClient();
     }
 
-    public function getClient()
+    public function setClient()
     {
         if (!env('MONGODB_USERNAME') && !env('MONGODB_PASSWORD')) {
-            return new Client(config('minio.db')['mongo']['driver'] . '://' .
+            $this->client = new Client(config('minio.db')['mongo']['driver'] . '://' .
                 config('minio.db')['mongo']['host'] . ':' .
                 config('minio.db')['mongo']['port']
             );
         } else {
-            return new Client(config('minio.db')['mongo']['driver'] . '://' .
+            $this->client = new Client(config('minio.db')['mongo']['driver'] . '://' .
                 config('minio.db')['mongo']['host'] . ':' .
                 config('minio.db')['mongo']['port']
                 , ['authSource' => config('minio.db')['mongo']['database'],

@@ -10,10 +10,10 @@ namespace Rahii\MinioLaravel\Classes;
 
 use Aws\S3\S3Client;
 use Carbon\Carbon;
-use Illuminate\Http\UploadedFile;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Config;
 use MongoDB\BSON\ObjectID;
+use Symfony\Component\HttpFoundation\File\File;
 
 
 class StorageClass
@@ -47,7 +47,7 @@ class StorageClass
         return $bucket;
     }
 
-    public function storeVideo(UploadedFile $videoFile, $user)
+    public function storeVideo(File $videoFile, $user)
     {
         $bucket = $this->setBucket();
         $id = new ObjectID();
@@ -57,7 +57,7 @@ class StorageClass
         $record = $this->adapter->write(date('d') . '/video/' . ($id->__toString()) . '.' . str_after($videoFile->getMimeType(), '/'),
             file_get_contents($videoFile), $config);
         $video = (new Media($id, $videoFile->getMimeType()))
-            ->setName($videoFile->getClientOriginalName())
+            ->setName($videoFile->getFilename())
             ->setSize($videoFile->getSize())
             ->setPath($record['path'])
             ->setCreatedAt(Carbon::now()->toDateTimeString())
@@ -67,7 +67,7 @@ class StorageClass
         return $video;
     }
 
-    public function storePicture(UploadedFile $pictureFile, $user)
+    public function storePicture(File $pictureFile, $user)
     {
         $bucket = $this->setBucket();
         $id = new ObjectID();
@@ -77,7 +77,7 @@ class StorageClass
         $record = $this->adapter->write(date('d') . '/picture/' . ($id->__toString()) . '.' . str_after($pictureFile->getMimeType(), '/'),
             file_get_contents($pictureFile), $config);
         $picture = (new Media($id, $pictureFile->getMimeType()))
-            ->setName($pictureFile->getClientOriginalName())
+            ->setName($pictureFile->getFilename())
             ->setSize($pictureFile->getSize())
             ->setPath($record['path'])
             ->setCreatedAt(Carbon::now()->toDateTimeString())
