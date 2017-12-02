@@ -75,7 +75,7 @@ class StorageClass
         $config = new Config();
         $config->set('mimetype', $videoFile->getMimeType());
         $config->set('type', 'video');
-        $record = $this->adapter->write(date('d') . '/video/' . ($id->__toString()) . '.' . rtrim($videoFile->getMimeType(), 'video/'),
+        $record = $this->adapter->write(date('d') . '/video/' . ($id->__toString()) . '.' . ltrim($videoFile->getMimeType(), 'video/'),
             file_get_contents($videoFile), $config);
         $video = (new Media($id, $videoFile->getMimeType()))
             ->setName($videoFile->getFilename())
@@ -103,7 +103,7 @@ class StorageClass
         $config = new Config();
         $config->set('mimetype', $pictureFile->getMimeType());
         $config->set('type', 'image');
-        $record = $this->adapter->write(date('d') . '/picture/' . ($id->__toString()) . '.' . rtrim($pictureFile->getMimeType(), 'image/'),
+        $record = $this->adapter->write(date('d') . '/picture/' . ($id->__toString()) . '.' . ltrim($pictureFile->getMimeType(), 'image/'),
             file_get_contents($pictureFile), $config);
         $picture = (new Media($id, $pictureFile->getMimeType()))
             ->setName($pictureFile->getFilename())
