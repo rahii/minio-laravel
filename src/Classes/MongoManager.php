@@ -20,6 +20,10 @@ class MongoManager
         $this->setClient();
     }
 
+    /**
+     *set the mongo client
+     *
+     */
     public function setClient()
     {
         if (!env('MONGODB_USERNAME') && !env('MONGODB_PASSWORD')) {
@@ -39,6 +43,12 @@ class MongoManager
 
     }
 
+    /**
+     * insert video data into mongo
+     *
+     * @param Media $video
+     * @return bool
+     */
     public function insertVideo(Media $video)
     {
         $collection = $this->client->selectCollection(config('minio.db')['mongo']['database'], 'videos');
@@ -46,6 +56,12 @@ class MongoManager
         return $result ? true : false;
     }
 
+    /**
+     * insert picture data into mongo
+     *
+     * @param Media $picture
+     * @return bool
+     */
     public function insertPicture(Media $picture)
     {
         $collection = $this->client->selectCollection(config('minio.db')['mongo']['database'], 'pictures');

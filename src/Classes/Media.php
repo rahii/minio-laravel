@@ -183,7 +183,7 @@ class Media implements JsonSerializable
             'mimetype' => $this->getMimetype(),
             'size' => $this->getSize(),
             'path' => $this->getPath(),
-            // 'uri' => $this->getUri(),
+            'uri' => $this->getUri(),
             'created_at' => $this->getCreatedAt(),
         ];
     }
@@ -197,7 +197,7 @@ class Media implements JsonSerializable
             "mimetype" => $this->getMimetype(),
             "size" => $this->getSize(),
             "path" => $this->getPath(),
-            //  "uri" => $this->getUri(),
+            "uri" => $this->getUri(),
             "bucket" => $this->getBucket(),
             "created_at" => $this->getCreatedAt(),
         ];
