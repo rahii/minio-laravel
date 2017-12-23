@@ -17,11 +17,13 @@ use Symfony\Component\HttpFoundation\File\File;
 
 class VersionController extends Controller
 {
+
     /**
      * get a versioned picture upon request
      *
      * @param Request $request
      * @param StorageClass $storageClass
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getVersionedPicture(Request $request, StorageClass $storageClass){
         /*TODO: version detection*/
@@ -39,6 +41,11 @@ class VersionController extends Controller
         }
         $image->save('../../tempics/' . $name);
         /*TODO: version resizing*/
-        $storageClass->storeVersionedPicture(new File('../../tempics/' . $name), $org_picture->getHashId(), $version, $org_picture->getBucket());
+        $picture = $storageClass->storeVersionedPicture(new File('../../tempics/' . $name), $org_picture->getHashId(), $version, $org_picture->getBucket());
+        return response()->json([
+            'status' => 'ok',
+            'url' => $picture->getUri()
+        ], '201');
+
     }
 }
