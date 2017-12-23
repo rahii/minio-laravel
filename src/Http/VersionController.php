@@ -1,15 +1,7 @@
 <?php
-
-use App\Http\Controllers\Controller;
-
-/**
- * Created by PhpStorm.
- * User: mahshid
- * Date: 12/16/17
- * Time: 3:26 PM
- */
 namespace Rahii\MinioLaravel\Http;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManager;
 use Rahii\MinioLaravel\Classes\StorageClass;

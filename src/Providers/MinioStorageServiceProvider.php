@@ -19,7 +19,7 @@ class MinioStorageServiceProvider extends ServiceProvider
             __DIR__ . '/../config' => config_path(),
 
         ]);
-        require __DIR__ . '../../Http/routes.php';
+        include __DIR__ . '../../Http/routes.php';
 
     }
 
