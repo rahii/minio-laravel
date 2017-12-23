@@ -10,5 +10,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['namespace' => 'Rahii\MinioLaravel\Http'], function()
 {
-    Route::get('picture/get', ['uses' => 'VersionController@getVersionedPicture']);
+    Route::get('picture/getVersion', ['uses' => 'VersionController@getVersionedPicture']);
 });

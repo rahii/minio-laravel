@@ -11,6 +11,7 @@ namespace Rahii\MinioLaravel\Classes;
 
 use MongoDB\BSON\ObjectID;
 use MongoDB\Client;
+use Psy\Exception\ErrorException;
 
 class MongoManager
 {
@@ -108,5 +109,23 @@ class MongoManager
             ->setSize($result['original']['size'])
             ->setDimension($result['original']['dimension']);
         return $picture;
+    }
+
+
+    /**
+     * check if a version of picture already exists
+     *
+     * @param $id
+     * @param $version
+     * @return null
+     */
+    public function versionedPictureExists($id, $version)
+    {
+        $collection = $this->client->selectCollection(config('minio.db')['mongo']['database'], 'pictures');
+        $result = $collection->findOne(['_id' => new ObjectID($id)]);
+        if (!array_has($result, $version)) {
+            return null;
+        }
+        return $result[$version]['uri'];
     }
 }

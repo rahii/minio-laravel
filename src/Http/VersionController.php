@@ -17,12 +17,13 @@ class VersionController extends Controller
      * @param StorageClass $storageClass
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getVersionedPicture(Request $request, StorageClass $storageClass){
+    public function getVersionedPicture(Request $request, StorageClass $storageClass, ImageManager $manager){
         /*TODO: version detection*/
-        $version = 'test';
+        $version = 'te';
+        $versionUrl = $storageClass->getManager()->versionedPictureExists($request->get('id'), $version);
+        if(!$versionUrl){
         $org_picture = $storageClass->getManager()->getPicturebyId($request->get('id'));
-        $manager = new ImageManager();
-        $image = $manager->make($org_picture->getUri())->resize(400,null, function ($c) {
+        $image = $manager->make($org_picture->getUri())->resize(100,null, function ($c) {
             $c->aspectRatio();
         });
         $image->setFileInfoFromPath($org_picture->getUri());
@@ -34,9 +35,11 @@ class VersionController extends Controller
         $image->save('../../tempics/' . $name);
         /*TODO: version resizing*/
         $picture = $storageClass->storeVersionedPicture(new File('../../tempics/' . $name), $org_picture->getHashId(), $version, $org_picture->getBucket());
+        $versionUrl = $picture->getUri();
+        }
         return response()->json([
             'status' => 'ok',
-            'url' => $picture->getUri()
+            'url' => $versionUrl
         ], '201');
 
     }
