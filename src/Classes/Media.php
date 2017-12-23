@@ -16,12 +16,15 @@ class Media implements JsonSerializable
     protected $name;
     protected $mimetype;
     protected $size;
+    protected $dimension;
     protected $path;
     protected $hashId;
     protected $created_at;
     protected $bucket;
-    protected $user;
+    protected $user_id;
     protected $uri;
+    protected $originalName;
+    protected $expiration_date;
 
     public function __construct($hashId, $mimetype)
     {
@@ -45,6 +48,25 @@ class Media implements JsonSerializable
         $this->name = $name;
         return $this;
     }
+
+    /**
+     * @param mixed $originalName
+     * @return Media
+     */
+    public function setOriginalName($originalName)
+    {
+        $this->originalName = $originalName;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOriginalName()
+    {
+        return $this->originalName;
+    }
+
 
     /**
      * @return mixed
@@ -116,17 +138,17 @@ class Media implements JsonSerializable
     /**
      * @return mixed
      */
-    public function getUser()
+    public function getUserId()
     {
-        return $this->user;
+        return $this->user_id;
     }
 
     /**
-     * @param mixed $user
+     * @param mixed $user_id
      */
-    public function setUser($user)
+    public function setUserId($user_id)
     {
-        $this->user = $user;
+        $this->user_id = $user_id;
         return $this;
     }
 
@@ -166,6 +188,42 @@ class Media implements JsonSerializable
         return $this;
     }
 
+    /**
+     * @param mixed $dimension
+     * @return Media
+     */
+    public function setDimension($dimension)
+    {
+        $this->dimension = $dimension;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDimension()
+    {
+        return $this->dimension;
+    }
+
+    /**
+     * @param mixed $expiration_date
+     */
+    public function setExpirationDate($expiration_date)
+    {
+        $this->expiration_date = $expiration_date;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExpirationDate()
+    {
+        return $this->expiration_date;
+    }
+
+
 
     /**
      * Specify data which should be serialized to JSON
@@ -179,27 +237,59 @@ class Media implements JsonSerializable
         return [
             'hashId' => $this->getHashId(),
             'name' => $this->getName(),
-            'user' => $this->getUser(),
+            'original name' => $this->getOriginalName(),
+            'user' => $this->getUserId(),
             'mimetype' => $this->getMimetype(),
             'size' => $this->getSize(),
+            'dimension' => $this->getDimension(),
             'path' => $this->getPath(),
             'uri' => $this->getUri(),
             'created_at' => $this->getCreatedAt(),
         ];
     }
 
+    /**
+     * return the original media as an array
+     *
+     * @return array
+     */
     public function __toArray()
     {
         return [
             '_id' => $this->getHashId(),
+            'originalName' => $this->getOriginalName(),
+            'user' => $this->getUserId(),
+            'bucket' => $this->getBucket(),
+            'created_at' => $this->getCreatedAt(),
+            'original' => [
+                'name' => $this->getName(),
+                'mimetype' => $this->getMimetype(),
+                'size' => $this->getSize(),
+                'dimension' => $this->getDimension(),
+                'path' => $this->getPath(),
+                'uri' => $this->getUri(),
+                'created_at' => $this->getCreatedAt(),
+            ]
+        ];
+    }
+
+
+    /**
+     * return a version of media as array
+     *
+     * @return array
+     */
+    public function version_toArray()
+    {
+        return [
             'name' => $this->getName(),
-            'user' => $this->getUser(),
             "mimetype" => $this->getMimetype(),
             "size" => $this->getSize(),
+            'dimension' => $this->getDimension(),
             "path" => $this->getPath(),
             "uri" => $this->getUri(),
-            "bucket" => $this->getBucket(),
             "created_at" => $this->getCreatedAt(),
+            "expiratione_date" => $this->getExpirationDate()
         ];
     }
 
