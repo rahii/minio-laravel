@@ -31,8 +31,8 @@ class MinioStorageServiceProvider extends ServiceProvider
     public function register()
     {
         /**
-        * Merge configurations
-        */
+         * Merge configurations
+         */
         /*
         $this->mergeConfigFrom(
             __DIR__ . '/config/app.php', 'packages.Rahii.MinioLaravel.app'
@@ -42,7 +42,7 @@ class MinioStorageServiceProvider extends ServiceProvider
         /*$this->app->bind('ClassExample', function(){
             return $this->app->make('Rahii\MinioLaravel\Classes\ClassExample');
         });*/
-        $this->app->bind('StorageClass', function(){
+        $this->app->bind('StorageClass', function () {
             return $this->app->make('Rahii\MinioLaravel\Classes\StorageClass');
         });
 

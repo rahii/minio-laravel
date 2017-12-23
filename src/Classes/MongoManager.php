@@ -11,7 +11,6 @@ namespace Rahii\MinioLaravel\Classes;
 
 use MongoDB\BSON\ObjectID;
 use MongoDB\Client;
-use Psy\Exception\ErrorException;
 
 class MongoManager
 {
@@ -100,14 +99,15 @@ class MongoManager
         $collection = $this->client->selectCollection(config('minio.db')['mongo']['database'], 'pictures');
         $result = $collection->findOne(['_id' => new ObjectID($id)]);
         if (!$result) {
-            /*TODO: exception*/
+            throw new NotFoundException('picture not found');
         }
         $picture = new Media($id, $mimetype);
         $picture->setBucket($result['bucket'])
             ->setUri($result['original']['uri'])
             ->setPath($result['original']['path'])
             ->setSize($result['original']['size'])
-            ->setDimension($result['original']['dimension']);
+            ->setHeight($result['original']['height'])
+            ->setWidth('width');
         return $picture;
     }
 

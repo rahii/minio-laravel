@@ -111,7 +111,6 @@ class StorageClass
     {
         $bucket = $this->setBucket();
         list($width, $height) = getimagesize($pictureFile);
-        $dimension = $width . "x" . $height;
         $id = new ObjectID();
         $config = new Config();
         $config->set('mimetype', $pictureFile->getMimeType());
@@ -122,7 +121,8 @@ class StorageClass
             ->setName(substr($id, -6) . '-org.')
             ->setOriginalName($pictureFile->getFilename())
             ->setSize($pictureFile->getSize())
-            ->setDimension($dimension)
+            ->setHeight($height)
+            ->setWidth($width)
             ->setPath($record['path'])
             ->setCreatedAt(Carbon::now()->toDateTimeString())
             ->setUserId($user)
@@ -145,7 +145,6 @@ class StorageClass
     {
         $this->adapter->setBucket($bucket);
         list($width, $height) = getimagesize($pictureFile);
-        $dimension = $width . "x" . $height;
         $config = new Config();
         $config->set('mimetype', $pictureFile->getMimeType());
         $config->set('type', 'image');
@@ -154,7 +153,8 @@ class StorageClass
         $picture = (new Media($id, $pictureFile->getMimeType()))
             ->setName($pictureFile->getFilename())
             ->setSize($pictureFile->getSize())
-            ->setDimension($dimension)
+            ->setHeight($height)
+            ->setWidth($width)
             ->setPath($record['path'])
             ->setCreatedAt(Carbon::now()->toDateTimeString())
             ->setExpirationDate(Carbon::now()->addDay(1)->toDateTimeString())

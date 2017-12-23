@@ -16,7 +16,7 @@ class Media implements JsonSerializable
     protected $name;
     protected $mimetype;
     protected $size;
-    protected $dimension;
+    protected $height, $width;
     protected $path;
     protected $hashId;
     protected $created_at;
@@ -189,24 +189,6 @@ class Media implements JsonSerializable
     }
 
     /**
-     * @param mixed $dimension
-     * @return Media
-     */
-    public function setDimension($dimension)
-    {
-        $this->dimension = $dimension;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDimension()
-    {
-        return $this->dimension;
-    }
-
-    /**
      * @param mixed $expiration_date
      */
     public function setExpirationDate($expiration_date)
@@ -223,7 +205,41 @@ class Media implements JsonSerializable
         return $this->expiration_date;
     }
 
+    /**
+     * @param mixed $height
+     * @return Media
+     */
+    public function setHeight($height)
+    {
+        $this->height = $height;
+        return $this;
+    }
 
+    /**
+     * @return mixed
+     */
+    public function getHeight()
+    {
+        return $this->height;
+    }
+
+    /**
+     * @param mixed $width
+     * @return Media
+     */
+    public function setWidth($width)
+    {
+        $this->width = $width;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWidth()
+    {
+        return $this->width;
+    }
 
     /**
      * Specify data which should be serialized to JSON
@@ -241,7 +257,8 @@ class Media implements JsonSerializable
             'user' => $this->getUserId(),
             'mimetype' => $this->getMimetype(),
             'size' => $this->getSize(),
-            'dimension' => $this->getDimension(),
+            'height' => $this->getHeight(),
+            'width' => $this->getWidth(),
             'path' => $this->getPath(),
             'uri' => $this->getUri(),
             'created_at' => $this->getCreatedAt(),
@@ -265,7 +282,8 @@ class Media implements JsonSerializable
                 'name' => $this->getName(),
                 'mimetype' => $this->getMimetype(),
                 'size' => $this->getSize(),
-                'dimension' => $this->getDimension(),
+                'height' => $this->getHeight(),
+                'width' => $this->getWidth(),
                 'path' => $this->getPath(),
                 'uri' => $this->getUri(),
                 'created_at' => $this->getCreatedAt(),
@@ -283,14 +301,17 @@ class Media implements JsonSerializable
     {
         return [
             'name' => $this->getName(),
-            "mimetype" => $this->getMimetype(),
-            "size" => $this->getSize(),
-            'dimension' => $this->getDimension(),
-            "path" => $this->getPath(),
-            "uri" => $this->getUri(),
-            "created_at" => $this->getCreatedAt(),
-            "expiratione_date" => $this->getExpirationDate()
+            'mimetype' => $this->getMimetype(),
+            'size' => $this->getSize(),
+            'height' => $this->getHeight(),
+            'width' =>$this->getWidth(),
+            'path' => $this->getPath(),
+            'uri' => $this->getUri(),
+            'created_at' => $this->getCreatedAt(),
+            'expiratione_date' => $this->getExpirationDate()
         ];
     }
+
+
 
 }
