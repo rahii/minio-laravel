@@ -19,7 +19,7 @@ return [
     'minioStorage' => [
         'minio_driver' => 's3',
         'endpoint' => env('MINIO_ENDPOINT', 'http://minio:9000'),
-        'domain' => env('', 'http://localhost:9000'),
+        'domain' => env('', 'http://minio:9000'),
         'use_path_style_endpoint' => true,
         'key' => env('AWS_KEY', ''),
         'secret' => env('AWS_SECRET', ''),

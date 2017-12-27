@@ -103,11 +103,12 @@ class MongoManager
         }
         $picture = new Media($id, $mimetype);
         $picture->setBucket($result['bucket'])
+            ->setOriginalExists($result['original_exists'])
             ->setUri($result['original']['uri'])
             ->setPath($result['original']['path'])
             ->setSize($result['original']['size'])
             ->setHeight($result['original']['height'])
-            ->setWidth('width');
+            ->setWidth($result['original']['width']);
         return $picture;
     }
 
@@ -127,5 +128,44 @@ class MongoManager
             return null;
         }
         return $result[$version]['uri'];
+    }
+
+    /**
+     * get a picture info from mongo by id and version
+     *
+     * @param $id
+     * @param $version
+     * @param string $mimetype
+     * @return null|Media
+     */
+    public function getPictureByVersion($id, $version, $mimetype = 'image/jpeg')
+    {
+        $collection = $this->client->selectCollection(config('minio.db')['mongo']['database'], 'pictures');
+        $result = $collection->findOne(['_id' => new ObjectID($id)]);
+        if (!array_has($result, $version)) {
+            return null;
+        }
+        $picture = new Media($id, $mimetype);
+        $picture->setBucket($result['bucket'])
+            ->setUri($result[$version]['uri'])
+            ->setPath($result[$version]['path'])
+            ->setSize($result[$version]['size'])
+            ->setHeight($result[$version]['height'])
+            ->setWidth($result[$version]['width']);
+        return $picture;
+    }
+
+    /**
+     * set original_exists false when the original picture file is removed
+     *
+     * @param $id
+     * @return bool
+     */
+    public function setOriginalRemoved($id)
+    {
+        $collection = $this->client->selectCollection(config('minio.db')['mongo']['database'], 'pictures');
+        $result = $collection->updateOne(['_id' => new ObjectID($id)],
+            ['$set' => ['original_exists' => false]]);
+        return $result ? true : false;
     }
 }

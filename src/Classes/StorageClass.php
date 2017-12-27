@@ -127,7 +127,8 @@ class StorageClass
             ->setCreatedAt(Carbon::now()->toDateTimeString())
             ->setUserId($user)
             ->setUri(config('minio.minioStorage')['domain'] . '/' . $bucket . '/' . $record['path'])
-            ->setBucket($bucket);
+            ->setBucket($bucket)
+            ->setOriginalExists(true);
         $this->manager->insertPicture($picture);
         return $picture;
     }
@@ -161,5 +162,18 @@ class StorageClass
             ->setUri(config('minio.minioStorage')['domain'] . '/' . $bucket . '/' . $record['path']);
         $this->manager->insertVersionedPicture($picture, $version);
         return $picture;
+    }
+
+    /**
+     * shows if a file exists in minio storage
+     *
+     * @param $bucket
+     * @param $path
+     * @return bool
+     */
+    Public function hasFile($bucket, $path)
+    {
+        $this->adapter->setBucket($bucket);
+        return $this->adapter->has($path);
     }
 }

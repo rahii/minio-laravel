@@ -25,6 +25,7 @@ class Media implements JsonSerializable
     protected $uri;
     protected $originalName;
     protected $expiration_date;
+    protected $original_exists;
 
     public function __construct($hashId, $mimetype)
     {
@@ -242,6 +243,24 @@ class Media implements JsonSerializable
     }
 
     /**
+     * @return mixed
+     */
+    public function getOriginalExists()
+    {
+        return $this->original_exists;
+    }
+
+    /**
+     * @param mixed $original_exists
+     * @return Media
+     */
+    public function setOriginalExists($original_exists)
+    {
+        $this->original_exists = $original_exists;
+        return $this;
+    }
+
+    /**
      * Specify data which should be serialized to JSON
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
      * @return mixed data which can be serialized by <b>json_encode</b>,
@@ -278,6 +297,7 @@ class Media implements JsonSerializable
             'user' => $this->getUserId(),
             'bucket' => $this->getBucket(),
             'created_at' => $this->getCreatedAt(),
+            'original_exists' => $this->getOriginalExists(),
             'original' => [
                 'name' => $this->getName(),
                 'mimetype' => $this->getMimetype(),
@@ -304,14 +324,12 @@ class Media implements JsonSerializable
             'mimetype' => $this->getMimetype(),
             'size' => $this->getSize(),
             'height' => $this->getHeight(),
-            'width' =>$this->getWidth(),
+            'width' => $this->getWidth(),
             'path' => $this->getPath(),
             'uri' => $this->getUri(),
             'created_at' => $this->getCreatedAt(),
             'expiratione_date' => $this->getExpirationDate()
         ];
     }
-
-
 
 }
