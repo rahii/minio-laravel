@@ -4,6 +4,7 @@ namespace Rahii\MinioLaravel\Http;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 use Intervention\Image\ImageManager;
 use Rahii\MinioLaravel\Classes\NotFoundException;
 use Rahii\MinioLaravel\Classes\StorageClass;
@@ -12,22 +13,23 @@ use Symfony\Component\HttpFoundation\File\File;
 class VersionController extends Controller
 {
 
+
     /**
      * get a versioned picture upon request
      *
      * @param Request $request
      * @param StorageClass $storageClass
-     * @return \Illuminate\Http\JsonResponse
+     * @param ImageManager $manager
+     * @return mixed
      */
-
-    public function getVersionedPicture(Request $request, StorageClass $storageClass, ImageManager $manager)
+    public function getVersionedPicture(Request $request, StorageClass $storageClass)
     {
         /*TODO: version detection*/
-        $version = 'shit';
+        $version = 'test';
         $versionUrl = $this->findVersionedPicture($request->get('id'), $version, $storageClass);
         if (!$versionUrl) {
             $org_picture = $this->findOriginalPicture($request->get('id'), $storageClass);
-            $image = $manager->make($org_picture->getUri())->resize(100, null, function ($c) {
+            $image = Image::make($org_picture->getUri())->resize(550, null, function ($c) {
                 $c->aspectRatio();
             });
 
@@ -41,12 +43,9 @@ class VersionController extends Controller
             /*TODO: version resizing*/
             $picture = $storageClass->storeVersionedPicture(new File('../../tempics/' . $name), $org_picture->getHashId(), $version, $org_picture->getBucket());
             $versionUrl = $picture->getUri();
-        }
-        return response()->json([
-            'status' => 'ok',
-            'url' => $versionUrl
-        ], '200');
 
+        }
+        return Image::make($versionUrl)->response();
     }
 
     /**
