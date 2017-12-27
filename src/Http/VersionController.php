@@ -23,7 +23,7 @@ class VersionController extends Controller
     public function getVersionedPicture(Request $request, StorageClass $storageClass, ImageManager $manager)
     {
         /*TODO: version detection*/
-        $version = 'test';
+        $version = 'shit';
         $versionUrl = $this->findVersionedPicture($request->get('id'), $version, $storageClass);
         if (!$versionUrl) {
             $org_picture = $this->findOriginalPicture($request->get('id'), $storageClass);
@@ -62,10 +62,9 @@ class VersionController extends Controller
         $versionedPicture = $storageClass->getManager()->getPictureByVersion($id, $version);
         if ($versionedPicture) {
             $file_exists = $storageClass->hasFile($versionedPicture->getBucket(), $versionedPicture->getPath());
-            if (!$file_exists) {
-                return null;
+            if ($file_exists) {
+                return $versionedPicture->getUri();
             }
-            return $versionedPicture->getUri();
         }
         return null;
     }
