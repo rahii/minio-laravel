@@ -15,7 +15,7 @@ class VersionController extends Controller
 
 
     /**
-     * get a versioned picture upon request
+     * get a versioned picture upon request if the version is defined in config
      *
      * @param Request $request
      * @param StorageClass $storageClass
@@ -24,27 +24,44 @@ class VersionController extends Controller
      */
     public function getVersionedPicture(Request $request, StorageClass $storageClass)
     {
-        /*TODO: version detection*/
-        $version = 'test';
-        $versionUrl = $this->findVersionedPicture($request->get('id'), $version, $storageClass);
+        $id = basename(pathinfo($request->get('path'))['dirname']);
+        $name = substr(pathinfo($request->get('path'))['basename'], 7);
+        $version = strstr($name, '.', true);
+        if (!array_has(config('minio.pic_version')['dimension'], $version)) {
+            throw new NotFoundException('not found');
+        }
+
+        $versionUrl = $this->findVersionedPicture($id, $version, $storageClass);
+
         if (!$versionUrl) {
-            $org_picture = $this->findOriginalPicture($request->get('id'), $storageClass);
-            $image = Image::make($org_picture->getUri())->resize(550, null, function ($c) {
-                $c->aspectRatio();
-            });
+
+            $org_picture = $this->findOriginalPicture($id, $storageClass);
+            if (str_finish($version, 'x')) {
+                $image = Image::make($org_picture->getUri())->resize(config('minio.pic_version')['dimension'][$version]['width'], null, function ($c) {
+                    $c->aspectRatio();
+                });
+            } else if (str_start($version, 'x')) {
+                $image = Image::make(null, $org_picture->getUri())->resize(null, config('minio.pic_version')['dimension'][$version]['height'], function ($c) {
+                    $c->aspectRatio();
+                });
+            } else {
+                $image = Image::make(null, $org_picture->getUri())->resize(config('minio.pic_version')['dimension'][$version]['width'], config('minio.pic_version')['dimension'][$version]['height']);
+            }
 
             $image->setFileInfoFromPath($org_picture->getUri());
+
             $name = substr($org_picture->getHashId(), -6) . '-' . $version . '.' . ltrim($image->mime(), 'image/');
+
             /*TODO: save on disk('cdn') */
             if (!file_exists('../../tempics/')) {
                 mkdir('../../tempics', 0777);
             }
             $image->save('../../tempics/' . $name);
-            /*TODO: version resizing*/
             $picture = $storageClass->storeVersionedPicture(new File('../../tempics/' . $name), $org_picture->getHashId(), $version, $org_picture->getBucket());
             $versionUrl = $picture->getUri();
 
         }
+
         return Image::make($versionUrl)->response();
     }
 

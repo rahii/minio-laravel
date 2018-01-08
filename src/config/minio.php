@@ -39,6 +39,19 @@ return [
                 'db' => env('MONGODB_AUTHDATABASE', '') //Sets the auth DB
             ),
         ],
+    ],
+
+    'pic_version' => [
+        'dimension' => [
+            '100x100' => ['width' => 100, 'height' => 100],
+            '200x200' => ['width' => 200, 'height' => 200],
+            '300x300' => ['width' => 300, 'height' => 300],
+            '350x350' => ['width' => 350, 'height' => 350],
+            '400x400' => ['width' => 400, 'height' => 400],
+            '450x450' => ['width' => 450, 'height' => 450],
+            '90x90' => ['width' => 90, 'height' => 90],
+            '100x' => ['height' => 100],
+            'x200' => ['width' => 200]]
     ]
 
 ];
