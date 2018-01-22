@@ -34,25 +34,23 @@ class VersionController extends Controller
         $versionUrl = $this->findVersionedPicture($id, $version, $storageClass);
 
         if (!$versionUrl) {
-
             $org_picture = $this->findOriginalPicture($id, $storageClass);
-            if (str_finish($version, 'x')) {
+            if (substr($version, -1, 1) == 'x') {
                 $image = Image::make($org_picture->getUri())->resize(config('minio.pic_version')['dimension'][$version]['width'], null, function ($c) {
                     $c->aspectRatio();
                 });
-            } else if (str_start($version, 'x')) {
-                $image = Image::make(null, $org_picture->getUri())->resize(null, config('minio.pic_version')['dimension'][$version]['height'], function ($c) {
+            } else if (substr($version, 0, 1) == 'x') {
+                $image = Image::make($org_picture->getUri())->resize(null, config('minio.pic_version')['dimension'][$version]['height'], function ($c) {
                     $c->aspectRatio();
                 });
             } else {
-                $image = Image::make(null, $org_picture->getUri())->resize(config('minio.pic_version')['dimension'][$version]['width'], config('minio.pic_version')['dimension'][$version]['height']);
+                $image = Image::make($org_picture->getUri())->resize(config('minio.pic_version')['dimension'][$version]['width'], config('minio.pic_version')['dimension'][$version]['height']);
             }
-
             $image->setFileInfoFromPath($org_picture->getUri());
 
             $name = substr($org_picture->getHashId(), -6) . '-' . $version . '.' . ltrim($image->mime(), 'image/');
 
-            /*TODO: save on disk('cdn') */
+            /*TODO: save on disk('cdn')*/
             if (!file_exists('../../tempics/')) {
                 mkdir('../../tempics', 0777);
             }
@@ -86,7 +84,7 @@ class VersionController extends Controller
     }
 
     /**
-     * chech if original picture exists through minio and mongo
+     * check if original picture exists through minio and mongo
      *
      * @param $id
      * @param StorageClass $storageClass
